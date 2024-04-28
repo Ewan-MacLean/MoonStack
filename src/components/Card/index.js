@@ -19,9 +19,11 @@ const Card = (props) => {
 }
 const styles = StyleSheet.create({
     card: {
-        width: '95%',
-        height: "60%",
+        width: '100%',
+        height: "100%",
         borderRadius: 10,
+        backgroundColor:'#fefefe',
+
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
