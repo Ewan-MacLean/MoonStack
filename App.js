@@ -1,26 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import Card from "./src/components/Card";
-import users from "./assets/data/users";
 import { registerRootComponent } from "expo";
-import AnimatedStack from "./src/components/AnimatedStack";
+
+import HomeScreen from "./src/screens/HomeScreen";
+import MatchesScreen from "./src/screens/MatchesScreen";
 
 const App = () => {
-    const onSwipeLeft = (user) => {
-        console.warn("swipe left:", user.name);
-    };
-    const onSwipeRight = (user) => {
-        console.warn("swipe right:", user.name);
-    };
-
     return (
         <View style={styles.pageContainer}>
-            <AnimatedStack
-                data={users}
-                renderItem={({ item }) => <Card user={item} />}
-                onSwipeLeft={onSwipeLeft}
-                onSwipeRight={onSwipeRight}
-            />
+            <HomeScreen />
+            <MatchesScreen />
         </View>
     );
 };

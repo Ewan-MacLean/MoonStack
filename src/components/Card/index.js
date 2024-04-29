@@ -20,7 +20,7 @@ const Card = (props) => {
 const styles = StyleSheet.create({
     card: {
         width: '100%',
-        height: "100%",
+        height: 500,
         borderRadius: 10,
         backgroundColor:'#fefefe',
 
