@@ -9,7 +9,7 @@ const App = () => {
     return (
         <View style={styles.pageContainer}>
             <HomeScreen />
-            <MatchesScreen />
+            {/* <MatchesScreen /> */}
         </View>
     );
 };

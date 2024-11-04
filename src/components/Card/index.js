@@ -4,6 +4,8 @@ import { Text, Image, ImageBackground, View, StyleSheet } from 'react-native'
 const Card = (props) => {
     const { name, image, bio } = props.user
     return (
+        // instead of an image, we will display the YTD graph
+        // card will contain graph, fundamentals, news, and online sentiment (reddit or other)
         <View style={styles.card}>
             <ImageBackground source={{
                 uri: image
@@ -34,7 +36,8 @@ const styles = StyleSheet.create({
         elevation: 11
     },
     image: {
-        width: "100%",
+        width: 350,
+        // width: "100%",
         height: "100%",
         borderRadius: 10,
         overflow: 'hidden',
