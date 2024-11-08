@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
 export default MatchesScreen;
 
 
-registerRootComponent(MatchesScreen);
+// registerRootComponent(MatchesScreen);

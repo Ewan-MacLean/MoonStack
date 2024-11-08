@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import Card from "../components/Card/index";
-import users from "../../assets/data/users";
+import stocks from "../../assets/data/dummyData.json"
 import { registerRootComponent } from "expo";
 import AnimatedStack from "../components/AnimatedStack";
 
 const HomeScreen = () => {
-    const onSwipeLeft = (user) => {
-        console.warn("swipe left:", user.name);
+    const onSwipeLeft = (stock) => {
+        console.warn("swipe left:", stock.symbol);
     };
-    const onSwipeRight = (user) => {
-        console.warn("swipe right:", user.name);
+    const onSwipeRight = (stock) => {
+        console.warn("swipe right:", stock.symbol);
     };
+
+    // console.log(stocks)
 
     return (
         <View style={styles.pageContainer}>
             <AnimatedStack
-                data={users}
-                renderItem={({ item }) => <Card user={item} />}
+                data={stocks}
+                renderItem={({ item }) => <Card stock={item} />}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
             />

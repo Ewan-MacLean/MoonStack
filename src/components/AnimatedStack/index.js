@@ -20,6 +20,8 @@ const SWIPE_VELOCITY = 800;
 const AnimatedStack = (props) => {
     const { data, renderItem,onSwipeLeft,onSwipeRight } = props;
 
+    // console.log(data)
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [nextIndex, setNextIndex] = useState(currentIndex + 1);
     const currentProfile = data[currentIndex];
