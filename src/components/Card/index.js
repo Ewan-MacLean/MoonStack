@@ -12,7 +12,6 @@ const Card = ({ stock }) => {
     const DATA = Array.from({ length: 31 }, (_, i) => ({
         day: i,
         lowTmp: 10 + 2 * Math.random(),
-        // highTmp: 40 + 30 * Math.random(),
     }));
 
     return (
@@ -30,7 +29,6 @@ const Card = ({ stock }) => {
                         yKeys={["lowTmp", "highTmp"]} 
 
                         axisOptions={{ font }} // 👈 we'll generate axis labels using given font.
-                        // labels=
                     >
                         {/* 👇 render function exposes various data, such as points. */}
                         {({ points }) => (
