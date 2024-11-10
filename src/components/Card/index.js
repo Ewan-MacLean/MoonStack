@@ -21,10 +21,6 @@ const Card = ({ stock }) => {
         navigation.navigate("Bio", {symbol,companyName});
     };
 
-    function numberWithCommas(value) {
-        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
     return (
         // instead of an image, we will display the YTD graph
         // card will contain graph, fundamentals, news, and online sentiment (reddit or other)
@@ -67,6 +63,7 @@ const Card = ({ stock }) => {
                                     <View>
                                         <Text style={styles.infoText}>{marketCap}</Text>
                                         <Text style={styles.infoText}>{volume.toLocaleString()}</Text>
+                                        {/* include open interest */}
                                     </View>
                                 </View>
                             </View>

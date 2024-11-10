@@ -82,8 +82,10 @@ const Bio = ({ navigation, route }) => {
                         <View>
                             {/* 
                             These will be an amalgamation of posts about the chosen stock in the last 90 days */}
-                            <Text>reddit sentiment</Text>
-                            <Text>twitter sentiment</Text>
+                            <Text>Reddit sentiment</Text>
+                            <Text>Twitter sentiment</Text>
+                            <Text>Yahoo finance sentiment</Text>
+                            <Text></Text>
                         </View>
                     </View>
                 </View>

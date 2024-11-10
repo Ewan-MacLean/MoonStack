@@ -64,7 +64,7 @@ const TabNavigator = ({ route: { params = {} } = {} }) => {
                     }}
                 />
                 <Tab.Screen
-                    name="Matches"
+                    name="Saved"
                     component={MatchesScreen}
                     options={{
                         headerShown: false,
@@ -78,6 +78,31 @@ const TabNavigator = ({ route: { params = {} } = {} }) => {
                                 }}
                             >
                                 Saved
+                            </Text>
+                        ),
+                        // tabBarIcon: ({ focused }) =>
+                        //     focused ? (
+                        //         <NotesActive style={{ width: 22, height: 22 }} />
+                        //     ) : (
+                        //         <NotesInactive style={{ width: 22, height: 22 }} />
+                        //     ),
+                    }}
+                />
+                <Tab.Screen
+                    name="Profile"
+                    component={MatchesScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarLabel: ({ tintColor, focused }) => (
+                            <Text
+                                style={{
+                                    // fontFamily: fonts.standard,
+                                    fontSize: 10,
+                                    lineHeight: 18,
+                                    color: 'white',
+                                }}
+                            >
+                                Profile
                             </Text>
                         ),
                         // tabBarIcon: ({ focused }) =>
