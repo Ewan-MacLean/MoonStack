@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, useWindowDimensions } from "react-native";
+import { View, StyleSheet, useWindowDimensions, Pressable } from "react-native";
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -18,7 +18,7 @@ const ROTATION = 60;
 const SWIPE_VELOCITY = 800;
 
 const AnimatedStack = (props) => {
-    const { data, renderItem,onSwipeLeft,onSwipeRight } = props;
+    const { data, renderItem, onSwipeLeft, onSwipeRight } = props;
 
     // console.log(data)
 
@@ -78,8 +78,8 @@ const AnimatedStack = (props) => {
                 {},
                 runOnJS(setCurrentIndex)(currentIndex + 1);
 
-                const onSwipe = event.velocityX > 0 ? onSwipeRight : onSwipeLeft
-                runOnJS(onSwipe)(currentProfile)
+            const onSwipe = event.velocityX > 0 ? onSwipeRight : onSwipeLeft;
+            runOnJS(onSwipe)(currentProfile);
         },
     });
 
@@ -125,11 +125,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         flex: 1,
-        width:'100%',
+        width: "100%",
     },
     animatedCard: {
         width: "90%",
-        height: '100%',
+        height: "100%",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",

@@ -4,13 +4,14 @@ import { registerRootComponent } from "expo";
 
 import HomeScreen from "./src/screens/HomeScreen";
 import MatchesScreen from "./src/screens/MatchesScreen";
+import HomeStackNavigator from "./src/navigator/HomeStackNavigator";
 
 const App = () => {
     return (
-        <View style={styles.pageContainer}>
-            <HomeScreen />
-            {/* <MatchesScreen /> */}
-        </View>
+        // <View style={styles.pageContainer}>
+            // {/* <HomeScreen /> */}
+            <HomeStackNavigator/>
+        // </View>
     );
 };
 

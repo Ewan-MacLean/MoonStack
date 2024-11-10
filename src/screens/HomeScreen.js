@@ -7,10 +7,10 @@ import AnimatedStack from "../components/AnimatedStack";
 
 const HomeScreen = () => {
     const onSwipeLeft = (stock) => {
-        console.warn("swipe left:", stock.symbol);
+        // console.warn("swipe left:", stock.symbol);
     };
     const onSwipeRight = (stock) => {
-        console.warn("swipe right:", stock.symbol);
+        // console.warn("swipe right:", stock.symbol);
     };
 
     // console.log(stocks)
