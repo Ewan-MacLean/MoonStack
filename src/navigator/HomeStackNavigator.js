@@ -5,6 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import MatchesScreen from "../screens/MatchesScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import Bio from "../screens/Bio";
+import TabNavigator from "./TabNavigator";
 
 //TODO: tie in ModelStackNavigator and subcomponents
 
@@ -12,7 +13,6 @@ const Stack = createStackNavigator();
 
 export default function HomeStackNavigator({ route: { params = {} } = {} }) {
     return (
-        <NavigationContainer>
             <Stack.Navigator initialRouteName="Home">
                 <Stack.Screen
                     name="Home"
@@ -23,7 +23,7 @@ export default function HomeStackNavigator({ route: { params = {} } = {} }) {
                     }}
                 />
                 <Stack.Screen
-                    name="MatchesScreen"
+                    name="Bio"
                     component={Bio}
                     options={{
                         headerShown: false,
@@ -31,6 +31,5 @@ export default function HomeStackNavigator({ route: { params = {} } = {} }) {
                     }}
                 />
             </Stack.Navigator>
-        </NavigationContainer>
     );
 }

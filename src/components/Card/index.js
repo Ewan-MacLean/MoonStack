@@ -1,14 +1,14 @@
 import React from "react";
-import { Text, Image, ImageBackground, View, StyleSheet,Pressable } from "react-native";
+import { Text, Image, ImageBackground, View, StyleSheet, Pressable } from "react-native";
 import { CartesianChart, Line } from "victory-native";
 import { useFont } from "@shopify/react-native-skia";
 import inter from "../../../assets/fonts/Inter_24pt-Regular.ttf";
 import { useNavigation } from "@react-navigation/native";
 
 const Card = ({ stock }) => {
-    const { symbol, companyName, currentPrice, marketCap,volume, tags = ["oink",'based','moon'] } = stock;
+    const { symbol, companyName, currentPrice, marketCap, volume, tags = ["oink", "based", "moon"] } = stock;
 
-    const navigation = useNavigation()
+    const navigation = useNavigation();
     // console.log('stock',stock)
     const font = useFont(inter, 12);
     const DATA = Array.from({ length: 31 }, (_, i) => ({
@@ -17,16 +17,23 @@ const Card = ({ stock }) => {
     }));
 
     // navigate to the bio screen
-    const openBio = () =>{
-     navigation.navigate("MatchesScreen",symbol)
+    const openBio = () => {
+        navigation.navigate("Bio", {symbol,companyName});
+    };
+
+    function numberWithCommas(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
     return (
         // instead of an image, we will display the YTD graph
         // card will contain graph, fundamentals, news, and online sentiment (reddit or other)
-        <Pressable style={styles.card} onPress={()=>{
-           openBio()
-        }}>
+        <Pressable
+            style={styles.card}
+            onPress={() => {
+                openBio();
+            }}
+        >
             <View style={styles.main}>
                 <View style={{ height: 300, width: 300, marginLeft: 10 }}>
                     <CartesianChart
@@ -52,10 +59,18 @@ const Card = ({ stock }) => {
                         <View style={styles.info}>
                             <View>
                                 <Text style={[styles.price, { fontWeight: "bold", fontSize: 30 }]}>{currentPrice}</Text>
-                                <Text style={styles.infoText}>M.Cap: {marketCap}</Text>
-                                <Text style={styles.infoText}>Vol.: {volume}</Text>
+                                <View style={{flexDirection:'row',justifyContent:'space-between',width:'70%'}}>
+                                    <View>
+                                        <Text style={styles.infoText}>M.Cap:</Text>
+                                        <Text style={styles.infoText}>Vol.:</Text>
+                                    </View>
+                                    <View>
+                                        <Text style={styles.infoText}>{marketCap}</Text>
+                                        <Text style={styles.infoText}>{volume.toLocaleString()}</Text>
+                                    </View>
+                                </View>
                             </View>
-                            <View style={{flexDirection:'row',gap:10}}>
+                            <View style={{ flexDirection: "row", gap: 10 }}>
                                 <Text style={styles.infoText}>3M:+10%</Text>
                                 <Text style={styles.infoText}>6M:+10%</Text>
                                 <Text style={styles.infoText}>1Y:+10%</Text>
@@ -104,8 +119,8 @@ const styles = StyleSheet.create({
     inner: {
         padding: 10,
         backgroundColor: "#bdbfbe",
-        height:150,
-        justifyContent:'space-between'
+        height: 150,
+        justifyContent: "space-between",
         // gap: 10,
     },
     label: {
@@ -114,7 +129,7 @@ const styles = StyleSheet.create({
     },
     info: {
         // height:'100%',
-        gap:5,
+        gap: 5,
         flex: 1,
         // borderWidth:1
     },
@@ -145,10 +160,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "white",
     },
-    infoText:{
+    infoText: {
         fontSize: 15,
-        color: "white",    
-    }
+        color: "white",
+    },
 });
 
 export default Card;

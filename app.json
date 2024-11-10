@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "afaf36a1-bc37-4c10-8505-bec600fa4178"
+      }
+    },
+    "owner": "ewan-m77"
   }
 }

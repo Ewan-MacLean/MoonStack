@@ -25,7 +25,7 @@ const Bio = ({ navigation, route }) => {
         lowTmp: 10 + 2 * Math.random(),
     }));
 
-    const symbol = route.params;
+    const {symbol,companyName} = route.params;
 
     const financialCharacteristics = [
         { id: "earningsPerShare", title: "EPS" },
@@ -49,7 +49,7 @@ const Bio = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.pageContainer}>
-            <NavHeader goBack={handleGoBack} title={symbol} />
+            <NavHeader goBack={handleGoBack} title={`${companyName} (${symbol})`} />
             <ScrollView style={{ flex: 1 }}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                     <View style={{ height: 300, width: "80%", marginRight: 30 }}>

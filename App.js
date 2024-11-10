@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { registerRootComponent } from "expo";
-
-import HomeScreen from "./src/screens/HomeScreen";
-import MatchesScreen from "./src/screens/MatchesScreen";
-import HomeStackNavigator from "./src/navigator/HomeStackNavigator";
+import TabNavigator from "./src/navigator/TabNavigator";
+import { NavigationContainer } from "@react-navigation/native";
 
 const App = () => {
     return (
         // <View style={styles.pageContainer}>
-            // {/* <HomeScreen /> */}
-            <HomeStackNavigator/>
+        // {/* <HomeScreen /> */}
+        <NavigationContainer>
+            <TabNavigator />
+        </NavigationContainer>
         // </View>
     );
 };
