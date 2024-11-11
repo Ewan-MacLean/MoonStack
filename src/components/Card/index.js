@@ -4,21 +4,21 @@ import { CartesianChart, Line } from "victory-native";
 import { useFont } from "@shopify/react-native-skia";
 import inter from "../../../assets/fonts/Inter_24pt-Regular.ttf";
 import { useNavigation } from "@react-navigation/native";
+import { LineChart } from "react-native-gifted-charts";
+import AnalysisChart from "../AnalysisChart";
 
-const Card = ({ stock }) => {
-    const { symbol, companyName, currentPrice, marketCap, volume, tags = ["oink", "based", "moon"] } = stock;
+const Card = ( stock ) => {
+    const { symbol, name, price, marketCap, volume, tags = ["oink", "based", "moon"] } = stock;
 
     const navigation = useNavigation();
     // console.log('stock',stock)
-    const font = useFont(inter, 12);
     const DATA = Array.from({ length: 31 }, (_, i) => ({
-        day: i,
-        lowTmp: 10 + 2 * Math.random(),
+        value: 10 + 2 * Math.random(),
     }));
 
     // navigate to the bio screen
     const openBio = () => {
-        navigation.navigate("Bio", {symbol,companyName});
+        // navigation.navigate("Bio", { symbol, companyName });
     };
 
     return (
@@ -31,22 +31,10 @@ const Card = ({ stock }) => {
             }}
         >
             <View style={styles.main}>
-                <View style={{ height: 300, width: 300, marginLeft: 10 }}>
-                    <CartesianChart
-                        data={DATA} // 👈 specify your data
-                        xKey="day" // 👈 specify data key for x-axis
-                        // yKeys={["lowTmp"]}
-                        yKeys={["lowTmp", "highTmp"]}
-                        axisOptions={{ font }} // 👈 we'll generate axis labels using given font.
-                    >
-                        {/* 👇 render function exposes various data, such as points. */}
-                        {({ points }) => (
-                            // 👇 and we'll use the Line component to render a line path.
-                            <Line points={points.lowTmp} color="green" strokeWidth={3} />
-                        )}
-                    </CartesianChart>
+                <View style={{ flex:1,justifyContent: "center", alignItems: "center",borderWidth:1 }}>
+                    <AnalysisChart />
                 </View>
-                <View style={styles.inner}>
+                {/* <View style={styles.inner}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         <View style={styles.label}>
                             <Text style={styles.name}>{symbol}</Text>
@@ -55,7 +43,7 @@ const Card = ({ stock }) => {
                         <View style={styles.info}>
                             <View>
                                 <Text style={[styles.price, { fontWeight: "bold", fontSize: 30 }]}>{currentPrice}</Text>
-                                <View style={{flexDirection:'row',justifyContent:'space-between',width:'70%'}}>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between", width: "70%" }}>
                                     <View>
                                         <Text style={styles.infoText}>M.Cap:</Text>
                                         <Text style={styles.infoText}>Vol.:</Text>
@@ -63,7 +51,6 @@ const Card = ({ stock }) => {
                                     <View>
                                         <Text style={styles.infoText}>{marketCap}</Text>
                                         <Text style={styles.infoText}>{volume.toLocaleString()}</Text>
-                                        {/* include open interest */}
                                     </View>
                                 </View>
                             </View>
@@ -83,7 +70,7 @@ const Card = ({ stock }) => {
                             );
                         })}
                     </View>
-                </View>
+                </View> */}
             </View>
         </Pressable>
     );

@@ -1,31 +1,27 @@
 import { registerRootComponent } from "expo";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, StyleSheet, SafeAreaView, Text, LogBox } from "react-native";
-import stocks from "../../assets/data/dummyData.json";
-import { useFont } from "@shopify/react-native-skia";
-import { useNavigation } from "@react-navigation/native";
+import { useFont, Circle } from "@shopify/react-native-skia";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
-import { CartesianChart, Line } from "victory-native";
 import inter from "../../assets/fonts/Inter_24pt-Regular.ttf";
-import Card from "../components/Card/index";
-import AnimatedStack from "../components/AnimatedStack";
+import { CartesianChart, Line, useChartPressState } from "victory-native";
+// import type { SharedValue } from "react-native-reanimated"
 import NavHeader from "../components/NavHeader";
+import AnalysisChart from "../components/AnalysisChart";
+import { LineChart } from "react-native-gifted-charts";
 
 const Bio = ({ navigation, route }) => {
-
-    LogBox.ignoreLogs(["VirtualizedLists"])
+    LogBox.ignoreLogs(["VirtualizedLists"]);
 
     const handleGoBack = () => {
         navigation.goBack();
     };
 
-    const font = useFont(inter, 12);
     const DATA = Array.from({ length: 31 }, (_, i) => ({
-        day: i,
-        lowTmp: 10 + 2 * Math.random(),
+        value: 10 + 2 * Math.random(),
     }));
 
-    const {symbol,companyName} = route.params;
+    const { symbol, companyName } = route.params;
 
     const financialCharacteristics = [
         { id: "earningsPerShare", title: "EPS" },
@@ -50,26 +46,26 @@ const Bio = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.pageContainer}>
             <NavHeader goBack={handleGoBack} title={`${companyName} (${symbol})`} />
-            <ScrollView style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ height: 300, width: "80%", marginRight: 30 }}>
-                        <CartesianChart
-                            data={DATA} // 👈 specify your data
-                            xKey="day" // 👈 specify data key for x-axis
-                            // yKeys={["lowTmp"]}
-                            yKeys={["lowTmp", "highTmp"]}
-                            axisOptions={{ font }} // 👈 we'll generate axis labels using given font.
-                        >
-                            {/* 👇 render function exposes various data, such as points. */}
-                            {({ points }) => (
-                                // 👇 and we'll use the Line component to render a line path.
-                                <Line points={points.lowTmp} color="green" strokeWidth={3} />
-                            )}
-                        </CartesianChart>
-                    </View>
+                    <LineChart
+                        width={350}
+                        adjustToWidth={true}
+                        initialSpacing={0}
+                        areaChart
+                        data={DATA}
+                        hideDataPoints
+                        curved
+                        pointerConfig={{
+                            pointerColor: "black",
+                        }}
+                        color="green"
+                        startFillColor="green"
+                        startOpacity={0.5}
+                    />
                 </View>
-                <View style={[styles.container,{flexDirection:'row',gap:20}]}>
-                    <View style={{flex:1}}>
+                <View style={[styles.container, { flexDirection: "row", gap: 20 }]}>
+                    <View style={{ flex: 1 }}>
                         <Text style={styles.header}>Fundamentals</Text>
                         <FlatList
                             data={financialCharacteristics}
@@ -77,15 +73,19 @@ const Bio = ({ navigation, route }) => {
                             keyExtractor={(item) => item.id}
                         />
                     </View>
-                    <View style={{flex:1}}>
+                    <View style={{ flex: 1 }}>
                         <Text style={styles.header}>News</Text>
                         <View>
-                            {/* 
-                            These will be an amalgamation of posts about the chosen stock in the last 90 days */}
+                            {/* These will be an amalgamation of posts about the chosen stock in the last 90 days */}
                             <Text>Reddit sentiment</Text>
                             <Text>Twitter sentiment</Text>
                             <Text>Yahoo finance sentiment</Text>
-                            <Text></Text>
+                            <Text>Past earnings v expected</Text>
+                            <Text>Second page for financial metrics</Text>
+                            <Text>
+                                Allow users to search stocks by bull pattern (recently had golden cross, cup & handle,
+                                bull flags, established support, testing resistance, volume patterns)
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -98,7 +98,7 @@ const Bio = ({ navigation, route }) => {
                         headquartered in Cupertino, California.
                     </Text>
                 </View>
-            </ScrollView>
+            </View>
         </SafeAreaView>
     );
 };

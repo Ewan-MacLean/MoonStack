@@ -36,10 +36,10 @@ const TabNavigator = ({ route: { params = {} } = {} }) => {
                         paddingBottom: 4,
                     },
                 }}
-                initialRouteName="Model"
+                initialRouteName="Home"
             >
                 <Tab.Screen
-                    name="Home"
+                    name="HomeScreen"
                     component={HomeStackNavigator}
                     options={{
                         headerShown: false,
