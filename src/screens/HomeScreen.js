@@ -4,6 +4,9 @@ import Card from "../components/Card/index";
 import stocks from "../../assets/data/dummyData.json";
 import { registerRootComponent } from "expo";
 import AnimatedStack from "../components/AnimatedStack";
+import Axios from "axios";
+import { isEmpty } from "lodash";
+import StockData from "../components/StockData";
 
 const HomeScreen = () => {
     const onSwipeLeft = (stock) => {
@@ -17,48 +20,47 @@ const HomeScreen = () => {
         return obj.symbol;
     });
 
-    let stockData = {};
+    // let stockData = {};
 
     const listString = symbolList.join(",");
 
-    async function fetchExam() {
-        try {
-            const response = await fetch(
-                `https://financialmodelingprep.com/api/v3/quote/${listString}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`,
-                {
-                    method: "GET",
-                    credentials: "same-origin",
-                }
-            );
-            const data = await response.json();
-            const filteredData = data.map(({ symbol, name, price, marketCap, volume }) => {
-                return { symbol, name, price, marketCap, volume };
-            });
-            return filteredData;
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    const [isMounted, setIsMounted] = useState(false);
+    const [stockData, setStockData] = useState({});
 
-    const readExam = async () => {
-        const exam = await fetchExam();
-        // console.log(exam);
-        return exam
-    };
-    readExam();
+    // const fetchStockData = () => {
+    //     Axios.get(
+    //         `https://financialmodelingprep.com/api/v3/quote/${listString}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`
+    //     ).then((res) => {
+    //         console.log("fetching...");
+    //         // console.log("data...", res.data);
+    //         setStockData(res.data);
+    //     });
+    // };
 
-    // console.log(readExam())
-    // console.log(stockData)
+    // // fetchStockData()
 
+    // // console.log('ismounted',isMounted)
+
+    // useEffect(() => {
+    //     if (isMounted === false) {
+    //         setIsMounted(true);
+    //         fetchStockData();
+    //     }
+    // }, []);
+
+    // useEffect(() => {
+    //     console.log(stockData);
+    // }, [stockData]);
 
     return (
         <View style={styles.pageContainer}>
-            <AnimatedStack
+            <StockData />
+            {/* <AnimatedStack
                 data={stocks}
                 renderItem={({ item }) => <Card stock={item} />}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
-            />
+            /> */}
         </View>
     );
 };

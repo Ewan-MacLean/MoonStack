@@ -7,8 +7,11 @@ import { useNavigation } from "@react-navigation/native";
 import { LineChart } from "react-native-gifted-charts";
 import AnalysisChart from "../AnalysisChart";
 
-const Card = ( stock ) => {
+const Card = ( stock, stockData ) => {
     const { symbol, name, price, marketCap, volume, tags = ["oink", "based", "moon"] } = stock;
+
+    // console.log('stock:',stock)
+    // console.log('stockData:',stockData)
 
     const navigation = useNavigation();
     // console.log('stock',stock)
