@@ -24,43 +24,28 @@ const HomeScreen = () => {
 
     const listString = symbolList.join(",");
 
-    const [isMounted, setIsMounted] = useState(false);
-    const [stockData, setStockData] = useState({});
+    const [data, setData] = useState("");
 
-    // const fetchStockData = () => {
-    //     Axios.get(
-    //         `https://financialmodelingprep.com/api/v3/quote/${listString}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`
-    //     ).then((res) => {
-    //         console.log("fetching...");
-    //         // console.log("data...", res.data);
-    //         setStockData(res.data);
-    //     });
-    // };
+    useEffect(() => {
+        Axios.get(`https://financialmodelingprep.com/api/v3/quote/${listString}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`).then(
+            (res) => {
+                console.log("fetching...");
+                setData(res.data);
+            }
+        );
+    }, []);
 
-    // // fetchStockData()
-
-    // // console.log('ismounted',isMounted)
-
-    // useEffect(() => {
-    //     if (isMounted === false) {
-    //         setIsMounted(true);
-    //         fetchStockData();
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     console.log(stockData);
-    // }, [stockData]);
+    // console.log('data:',data[0])
 
     return (
         <View style={styles.pageContainer}>
-            <StockData />
-            {/* <AnimatedStack
-                data={stocks}
+            {/* <StockData /> */}
+            <AnimatedStack
+                data={data}
                 renderItem={({ item }) => <Card stock={item} />}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
-            /> */}
+            />
         </View>
     );
 };

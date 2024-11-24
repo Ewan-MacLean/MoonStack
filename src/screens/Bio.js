@@ -1,5 +1,5 @@
 import { registerRootComponent } from "expo";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, SafeAreaView, Text, LogBox } from "react-native";
 import { useFont, Circle } from "@shopify/react-native-skia";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
@@ -9,9 +9,10 @@ import { CartesianChart, Line, useChartPressState } from "victory-native";
 import NavHeader from "../components/NavHeader";
 import AnalysisChart from "../components/AnalysisChart";
 import { LineChart } from "react-native-gifted-charts";
+import Axios from "axios";
 
 const Bio = ({ navigation, route }) => {
-    LogBox.ignoreLogs(["VirtualizedLists"]);
+    const [data, setData] = useState("");
 
     const handleGoBack = () => {
         navigation.goBack();
@@ -21,7 +22,7 @@ const Bio = ({ navigation, route }) => {
         value: 10 + 2 * Math.random(),
     }));
 
-    const { symbol, companyName } = route.params;
+    const { symbol, name } = route.params;
 
     const financialCharacteristics = [
         { id: "earningsPerShare", title: "EPS" },
@@ -36,6 +37,22 @@ const Bio = ({ navigation, route }) => {
         { id: "beta", title: "Beta" },
     ];
 
+    useEffect(() => {
+        Axios.get(
+            `https://financialmodelingprep.com/api/v3/profile/${symbol}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`
+        ).then((res) => {
+            console.log("fetching bio...");
+            setData(res.data[0]);
+        });
+    }, []);
+
+    // console.log("data...", data);
+    // console.log('DATA',DATA)
+
+    const { description } = data;
+
+    LogBox.ignoreLogs(["VirtualizedLists"]);
+
     const Item = ({ title }) => (
         <View style={styles.item}>
             <Text style={styles.title}>{title}</Text>
@@ -45,8 +62,8 @@ const Bio = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.pageContainer}>
-            <NavHeader goBack={handleGoBack} title={`${companyName} (${symbol})`} />
-            <View style={{ flex: 1 }}>
+            <NavHeader goBack={handleGoBack} title={`${name} (${symbol})`} />
+            <ScrollView style={{ flex: 1 }}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                     <LineChart
                         width={350}
@@ -91,14 +108,10 @@ const Bio = ({ navigation, route }) => {
                 </View>
                 <View style={styles.container}>
                     <Text style={styles.header}>Bio</Text>
-                    <Text>
-                        Apple Inc. designs and sells consumer electronics like iPhones, Macs, and iPads, along with
-                        wearables and accessories. It also offers services such as the App Store, Apple Music, and Apple
-                        Pay, catering to individual, business, and institutional customers. Founded in 1976, Apple is
-                        headquartered in Cupertino, California.
-                    </Text>
+                    {/* use the AI api to summarize the bio */}
+                    <Text>{description}</Text>
                 </View>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };

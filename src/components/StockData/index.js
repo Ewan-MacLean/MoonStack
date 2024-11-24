@@ -15,11 +15,11 @@ const StockData = () => {
         );
     }, []);
 
-    console.log(data[0].symbol)
+    console.log(data)
 
     return (
         <View style={{ backgroundColor: "white", padding: 50, borderRadius: 5 }}>
-            <Text>{data[0].symbol}</Text>
+            <Text>{data[0]?.avgVolume}</Text>
         </View>
     );
 };

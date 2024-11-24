@@ -5,7 +5,7 @@ import { Circle, useFont } from "@shopify/react-native-skia";
 import { SharedValue } from "react-native-reanimated";
 import inter from "../../../assets/fonts/Inter_24pt-Regular.ttf";
 
-const AnalysisChart = () => {
+const AnalysisChart = ({historicalData}) => {
     const font = useFont(inter, 12);
     const { state, isActive } = useChartPressState({ x: 0, y: { highTmp: 0 } });
 
@@ -14,27 +14,38 @@ const AnalysisChart = () => {
         return <Circle cx={x} cy={y} r={8} color="black" />;
     }
 
+    // console.log('hist',historicalData)
+
     const DATA = Array.from({ length: 31 }, (_, i) => ({
         day: i,
         highTmp: 40 + 30 * Math.random(),
     }));
+
+    // console.log(DATA)
     return (
         <View style={{ height: 300, width: "100%", paddingHorizontal: 20 }}>
             <CartesianChart
-                data={DATA}
-                xKey="day"
-                yKeys={["highTmp"]}
+                data={historicalData.slice(0,50)}
+                xKey="t"
+                yKeys={["value"]}
                 axisOptions={{
                     font,
                 }}
-                chartPressState={state}
+                domainPadding={{ top: 20, bottom: 20 }}
+                // xAxis={
+                //     {tickCount:10}
+                // }
+                // yAxis={
+                //     {tickCount:10}
+                // }
+                // chartPressState={state}
             >
                 {({ points }) => {
                     // console.log("value");
                     return (
                         <>
-                            <Line points={points.highTmp} color="red" strokeWidth={3} />
-                            {isActive && <ToolTip x={state.x.position} y={state.y.highTmp.position} />}
+                            <Line points={points.value} color="red" strokeWidth={3} />
+                            {isActive && <ToolTip x={state.x.position} y={state.y.value.position} />}
                         </>
                     );
                 }}

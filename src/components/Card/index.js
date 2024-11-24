@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, Image, ImageBackground, View, StyleSheet, Pressable } from "react-native";
 import { CartesianChart, Line } from "victory-native";
 import { useFont } from "@shopify/react-native-skia";
@@ -6,23 +6,61 @@ import inter from "../../../assets/fonts/Inter_24pt-Regular.ttf";
 import { useNavigation } from "@react-navigation/native";
 import { LineChart } from "react-native-gifted-charts";
 import AnalysisChart from "../AnalysisChart";
+import stocks from "../../../assets/data/dummyData.json";
+import Axios from "axios";
+import { isEmpty } from "lodash";
 
-const Card = ( stock, stockData ) => {
+const Card = ({ stock }) => {
     const { symbol, name, price, marketCap, volume, tags = ["oink", "based", "moon"] } = stock;
 
-    // console.log('stock:',stock)
+    const [data, setData] = useState("");
+    // console.log('oink...',symbol,name)
     // console.log('stockData:',stockData)
 
     const navigation = useNavigation();
     // console.log('stock',stock)
-    const DATA = Array.from({ length: 31 }, (_, i) => ({
-        value: 10 + 2 * Math.random(),
-    }));
 
     // navigate to the bio screen
     const openBio = () => {
-        // navigation.navigate("Bio", { symbol, companyName });
+        navigation.navigate("Bio", { symbol, name, historicalData });
     };
+
+    const formatCash = (n) => {
+        if (n < 1e3) return n;
+        if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
+        if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
+        if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + "B";
+        if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
+    };
+
+    const options = {
+        method: "GET",
+        url: `https://data.alpaca.markets/v2/stocks/quotes?symbols=${symbol}&start=2024-01-03T00%3A00%3A00Z&limit=1000&feed=sip&sort=asc`,
+        headers: {
+            accept: "application/json",
+            "APCA-API-KEY-ID": "PKC1G9RTPOQE7OZHFYBF",
+            "APCA-API-SECRET-KEY": "ooX4vANRGbeSUlTX2S7qdFryf0Cm7kdS1T0wmtFf",
+        },
+    };
+
+    useEffect(() => {
+        Axios.request(options)
+            .then((res) => {
+                setData(res.data);
+                // console.log(res.data)
+            })
+            .catch((err) => console.error(err));
+    }, []);
+
+    let historicalData = [];
+    if (!isEmpty(data)) {
+        const definedData = data?.quotes[symbol] || [];
+        historicalData =
+            definedData?.map(({ ap, t }, ind) => {
+                return { value: ap, t: ind };
+            }) || [];
+        // console.log(historicalData?.slice(1, 10) || []);
+    }
 
     return (
         // instead of an image, we will display the YTD graph
@@ -34,34 +72,34 @@ const Card = ( stock, stockData ) => {
             }}
         >
             <View style={styles.main}>
-                <View style={{ flex:1,justifyContent: "center", alignItems: "center",borderWidth:1 }}>
-                    <AnalysisChart />
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center", borderWidth: 1 }}>
+                    {!isEmpty(historicalData) && <AnalysisChart historicalData={historicalData} />}
                 </View>
-                {/* <View style={styles.inner}>
+                <View style={styles.inner}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                         <View style={styles.label}>
                             <Text style={styles.name}>{symbol}</Text>
-                            <Text style={styles.bio}>{companyName}</Text>
+                            <Text style={styles.bio}>{name}</Text>
                         </View>
                         <View style={styles.info}>
-                            <View>
-                                <Text style={[styles.price, { fontWeight: "bold", fontSize: 30 }]}>{currentPrice}</Text>
-                                <View style={{ flexDirection: "row", justifyContent: "space-between", width: "70%" }}>
+                            <View style={{ flexDirection: "row", gap: 15 }}>
+                                <Text style={[styles.price, { fontWeight: "bold", fontSize: 30 }]}>{price}</Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between", width: "40%" }}>
                                     <View>
                                         <Text style={styles.infoText}>M.Cap:</Text>
-                                        <Text style={styles.infoText}>Vol.:</Text>
+                                        <Text style={styles.infoText}>Vol:</Text>
                                     </View>
                                     <View>
-                                        <Text style={styles.infoText}>{marketCap}</Text>
-                                        <Text style={styles.infoText}>{volume.toLocaleString()}</Text>
+                                        <Text style={styles.infoText}>{formatCash(marketCap)}</Text>
+                                        <Text style={styles.infoText}>{formatCash(volume)}</Text>
                                     </View>
                                 </View>
                             </View>
-                            <View style={{ flexDirection: "row", gap: 10 }}>
+                            {/* <View style={{ flexDirection: "row", gap: 10 }}>
                                 <Text style={styles.infoText}>3M:+10%</Text>
                                 <Text style={styles.infoText}>6M:+10%</Text>
                                 <Text style={styles.infoText}>1Y:+10%</Text>
-                            </View>
+                            </View> */}
                         </View>
                     </View>
                     <View style={styles.tags}>
@@ -73,7 +111,7 @@ const Card = ( stock, stockData ) => {
                             );
                         })}
                     </View>
-                </View> */}
+                </View>
             </View>
         </Pressable>
     );
@@ -116,6 +154,8 @@ const styles = StyleSheet.create({
     },
     info: {
         // height:'100%',
+        flex: 1,
+        flexDirection: "column",
         gap: 5,
         flex: 1,
         // borderWidth:1
