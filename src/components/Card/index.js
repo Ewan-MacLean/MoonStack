@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, Image, ImageBackground, View, StyleSheet, Pressable } from "react-native";
-import { CartesianChart, Line } from "victory-native";
-import { useFont } from "@shopify/react-native-skia";
-import inter from "../../../assets/fonts/Inter_24pt-Regular.ttf";
 import { useNavigation } from "@react-navigation/native";
-import { LineChart } from "react-native-gifted-charts";
 import AnalysisChart from "../AnalysisChart";
-import stocks from "../../../assets/data/dummyData.json";
 import Axios from "axios";
 import { isEmpty } from "lodash";
 
