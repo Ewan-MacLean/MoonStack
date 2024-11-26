@@ -44,7 +44,7 @@ const AnalysisChart = ({historicalData}) => {
                     // console.log("value");
                     return (
                         <>
-                            <Line points={points.value} color="red" strokeWidth={3} />
+                            <Line points={points.value} color="red" strokeWidth={3} curveType="natural" />
                             {isActive && <ToolTip x={state.x.position} y={state.y.value.position} />}
                         </>
                     );
