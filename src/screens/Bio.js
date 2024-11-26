@@ -24,7 +24,7 @@ const Bio = ({ navigation, route }) => {
         value: 10 + 2 * Math.random(),
     }));
 
-    const { symbol, name } = route.params;
+    const { symbol, name, oinkData } = route.params;
 
     const financialCharacteristics = [
         { id: "earningsPerShare", title: "EPS" },
@@ -46,23 +46,23 @@ const Bio = ({ navigation, route }) => {
             // console.log("fetching bio...");
             setData(res.data[0]);
         });
-        Axios.get(
-            `https://api.twelvedata.com/time_series?start_date=2020-05-06&outputsize=10&symbol=aapl&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
-        ).then((res) => {
-            console.log("fetching chart...");
-            setChartData(res.data.values);
-        });
+        // Axios.get(
+        //     `https://api.twelvedata.com/time_series?start_date=2020-05-06&outputsize=10&symbol=aapl&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
+        // ).then((res) => {
+        //     console.log("fetching chart...");
+        //     setChartData(res.data.values);
+        // });
     }, []);
 
-    const oinkData = chartData
-        ? chartData.map(({ close, datetime }, ind) => {
-              return { value: parseFloat(close), t: ind };
-          })
-        : [];
+    // const oinkData = chartData
+    //     ? chartData.map(({ close, datetime }, ind) => {
+    //           return { value: parseFloat(close), t: ind };
+    //       })
+    //     : [];
 
     // console.log("data...", data);
-    console.log("DATA", DATA);
-    console.log("oinkData", oinkData);
+    // console.log("DATA", DATA);
+    // console.log("oinkData", oinkData);
     // console.log('chartDATA',chartData)
 
     const { description } = data;

@@ -18,7 +18,7 @@ const Card = ({ stock }) => {
 
     // navigate to the bio screen
     const openBio = () => {
-        navigation.navigate("Bio", { symbol, name, historicalData });
+        navigation.navigate("Bio", { symbol, name, oinkData });
     };
 
     const formatCash = (n) => {
@@ -40,12 +40,6 @@ const Card = ({ stock }) => {
     };
 
     useEffect(() => {
-        Axios.request(options)
-            .then((res) => {
-                setData(res.data);
-                // console.log(res.data)
-            })
-            .catch((err) => console.error(err));
         Axios.get(
             `https://api.twelvedata.com/time_series?start_date=2020-05-06&outputsize=10&symbol=aapl&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
         ).then((res) => {
@@ -54,17 +48,6 @@ const Card = ({ stock }) => {
         });
     }, []);
 
-    let historicalData = [];
-    if (!isEmpty(data)) {
-        const definedData = data?.quotes[symbol] || [];
-        historicalData =
-            definedData
-                ?.map(({ ap, t }, ind) => {
-                    return { value: ap, t: ind };
-                })
-                .slice(0, 50) || [];
-    }
-    console.log("hist", historicalData || []);
     const oinkData = chartData
         ? chartData.map(({ close, datetime }, ind) => {
               return { value: parseFloat(close), t: ind };
@@ -82,7 +65,7 @@ const Card = ({ stock }) => {
         >
             <View style={styles.main}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center", borderWidth: 1 }}>
-                    {!isEmpty(historicalData) && <AnalysisChart historicalData={oinkData} />}
+                    {!isEmpty(oinkData) && <AnalysisChart historicalData={oinkData} />}
                 </View>
                 <View style={styles.inner}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
