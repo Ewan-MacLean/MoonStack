@@ -29,24 +29,14 @@ const Card = ({ stock }) => {
         if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
     };
 
-    const options = {
-        method: "GET",
-        url: `https://data.alpaca.markets/v2/stocks/quotes?symbols=${symbol}&start=2024-01-03T00%3A00%3A00Z&limit=1000&feed=sip&sort=asc`,
-        headers: {
-            accept: "application/json",
-            "APCA-API-KEY-ID": "PKC1G9RTPOQE7OZHFYBF",
-            "APCA-API-SECRET-KEY": "ooX4vANRGbeSUlTX2S7qdFryf0Cm7kdS1T0wmtFf",
-        },
-    };
-
     useEffect(() => {
         Axios.get(
-            `https://api.twelvedata.com/time_series?start_date=2020-05-06&outputsize=10&symbol=aapl&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
+            `https://api.twelvedata.com/time_series?start_date=2020-05-06&outputsize=10&symbol=${symbol.toLowerCase()}&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
         ).then((res) => {
             console.log("fetching chart...");
             setChartData(res.data.values);
         });
-    }, []);
+    }, [symbol]);
 
     const oinkData = chartData
         ? chartData.map(({ close, datetime }, ind) => {
