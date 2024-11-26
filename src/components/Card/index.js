@@ -29,18 +29,42 @@ const Card = ({ stock }) => {
         if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
     };
 
+    const options = {
+      method: 'GET',
+      url: `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&timeframe=1D&start=2024-11-03&limit=1000&adjustment=raw&feed=sip&sort=asc`,
+      headers: {
+        accept: 'application/json',
+        'APCA-API-KEY-ID': 'PKSMKSPD6TJUUPYIA2BT',
+        'APCA-API-SECRET-KEY': 'ry0JLg188ZobYvqwLa7CZiN9cD8bCR5We13dkgPF'
+      }
+    };
+    
+    // axios
+    //   .request(options)
+    //   .then(res => console.log(res.data))
+    //   .catch(err => console.error(err));
+
     useEffect(() => {
-        Axios.get(
-            `https://api.twelvedata.com/time_series?start_date=2020-05-06&outputsize=10&symbol=${symbol.toLowerCase()}&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
-        ).then((res) => {
-            console.log("fetching chart...");
-            setChartData(res.data.values);
-        });
+        Axios.request(options)
+            .then((res) => {
+                setChartData(res.data.bars[symbol]);
+                console.log(res.data.bars[symbol])
+            })
+            .catch((err) => console.error(err));
     }, [symbol]);
 
+    // useEffect(() => {
+    //     Axios.get(
+    //         `https://api.twelvedata.com/time_series?start_date=2023-05-06&outputsize=10&symbol=${symbol.toLowerCase()}&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
+    //     ).then((res) => {
+    //         console.log("fetching chart...");
+    //         setChartData(res.data.values);
+    //     });
+    // }, [symbol]);
+
     const oinkData = chartData
-        ? chartData.map(({ close, datetime }, ind) => {
-              return { value: parseFloat(close), t: ind };
+        ? chartData.map(({ c, datetime }, ind) => {
+              return { value: parseFloat(c), t: ind };
           })
         : [];
     console.log("oinkData", oinkData);
