@@ -10,9 +10,11 @@ import NavHeader from "../components/NavHeader";
 import AnalysisChart from "../components/AnalysisChart";
 import { LineChart } from "react-native-gifted-charts";
 import Axios from "axios";
+import { isEmpty } from "lodash";
 
 const Bio = ({ navigation, route }) => {
     const [data, setData] = useState("");
+    const [chartData, setChartData] = useState("");
 
     const handleGoBack = () => {
         navigation.goBack();
@@ -41,13 +43,27 @@ const Bio = ({ navigation, route }) => {
         Axios.get(
             `https://financialmodelingprep.com/api/v3/profile/${symbol}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`
         ).then((res) => {
-            console.log("fetching bio...");
+            // console.log("fetching bio...");
             setData(res.data[0]);
+        });
+        Axios.get(
+            `https://api.twelvedata.com/time_series?start_date=2020-05-06&outputsize=10&symbol=aapl&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
+        ).then((res) => {
+            console.log("fetching chart...");
+            setChartData(res.data.values);
         });
     }, []);
 
+    const oinkData = chartData
+        ? chartData.map(({ close, datetime }, ind) => {
+              return { value: parseFloat(close), t: ind };
+          })
+        : [];
+
     // console.log("data...", data);
-    // console.log('DATA',DATA)
+    console.log("DATA", DATA);
+    console.log("oinkData", oinkData);
+    // console.log('chartDATA',chartData)
 
     const { description } = data;
 
@@ -65,21 +81,9 @@ const Bio = ({ navigation, route }) => {
             <NavHeader goBack={handleGoBack} title={`${name} (${symbol})`} />
             <ScrollView style={{ flex: 1 }}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    <LineChart
-                        width={350}
-                        adjustToWidth={true}
-                        initialSpacing={0}
-                        areaChart
-                        data={DATA}
-                        hideDataPoints
-                        curved
-                        pointerConfig={{
-                            pointerColor: "black",
-                        }}
-                        color="green"
-                        startFillColor="green"
-                        startOpacity={0.5}
-                    />
+                    {!isEmpty(oinkData) && (
+                        <AnalysisChart historicalData={oinkData} />
+                    )}
                 </View>
                 <View style={[styles.container, { flexDirection: "row", gap: 20 }]}>
                     <View style={{ flex: 1 }}>

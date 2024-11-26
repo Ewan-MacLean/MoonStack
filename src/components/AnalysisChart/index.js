@@ -25,7 +25,7 @@ const AnalysisChart = ({historicalData}) => {
     return (
         <View style={{ height: 300, width: "100%", paddingHorizontal: 20 }}>
             <CartesianChart
-                data={historicalData.slice(0,50)}
+                data={historicalData}
                 xKey="t"
                 yKeys={["value"]}
                 axisOptions={{

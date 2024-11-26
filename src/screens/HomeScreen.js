@@ -8,6 +8,8 @@ import Axios from "axios";
 import { isEmpty } from "lodash";
 import StockData from "../components/StockData";
 
+// RENAME THE APP TO 'MOONSTACK'
+
 const HomeScreen = () => {
     const onSwipeLeft = (stock) => {
         // console.log("swipe left:", stock.symbol);

@@ -10,6 +10,7 @@ const Card = ({ stock }) => {
 
     const [data, setData] = useState("");
     // console.log('oink...',symbol,name)
+    const [chartData, setChartData] = useState("");
     // console.log('stockData:',stockData)
 
     const navigation = useNavigation();
@@ -45,18 +46,31 @@ const Card = ({ stock }) => {
                 // console.log(res.data)
             })
             .catch((err) => console.error(err));
+        Axios.get(
+            `https://api.twelvedata.com/time_series?start_date=2020-05-06&outputsize=10&symbol=aapl&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
+        ).then((res) => {
+            console.log("fetching chart...");
+            setChartData(res.data.values);
+        });
     }, []);
 
     let historicalData = [];
     if (!isEmpty(data)) {
         const definedData = data?.quotes[symbol] || [];
         historicalData =
-            definedData?.map(({ ap, t }, ind) => {
-                return { value: ap, t: ind };
-            }) || [];
-        // console.log(historicalData?.slice(1, 10) || []);
+            definedData
+                ?.map(({ ap, t }, ind) => {
+                    return { value: ap, t: ind };
+                })
+                .slice(0, 50) || [];
     }
-
+    console.log("hist", historicalData || []);
+    const oinkData = chartData
+        ? chartData.map(({ close, datetime }, ind) => {
+              return { value: parseFloat(close), t: ind };
+          })
+        : [];
+    console.log("oinkData", oinkData);
     return (
         // instead of an image, we will display the YTD graph
         // card will contain graph, fundamentals, news, and online sentiment (reddit or other)
@@ -68,7 +82,7 @@ const Card = ({ stock }) => {
         >
             <View style={styles.main}>
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center", borderWidth: 1 }}>
-                    {!isEmpty(historicalData) && <AnalysisChart historicalData={historicalData} />}
+                    {!isEmpty(historicalData) && <AnalysisChart historicalData={oinkData} />}
                 </View>
                 <View style={styles.inner}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
