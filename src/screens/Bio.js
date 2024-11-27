@@ -4,7 +4,7 @@ import { View, StyleSheet, SafeAreaView, Text, LogBox } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import NavHeader from "../components/NavHeader";
 import AnalysisChart from "../components/AnalysisChart";
-import Axios from "axios";
+import axios from "axios";
 import { isEmpty } from "lodash";
 
 const Bio = ({ navigation, route }) => {
@@ -31,16 +31,16 @@ const Bio = ({ navigation, route }) => {
     ];
 
     useEffect(() => {
-        Axios.get(
+        axios.get(
             `https://financialmodelingprep.com/api/v3/profile/${symbol}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`
         ).then((res) => {
             // console.log("fetching bio...");
             setData(res.data[0]);
         });
-        Axios.get(
+        axios.get(
             `https://financialmodelingprep.com/api/v3/key-metrics-ttm/${symbol}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`
         ).then((res) => {
-            // console.log("fetching bio...");
+            // console.log("fetching key metrics...");
             setKeyMetrics(res.data[0]);
         });
     }, []);

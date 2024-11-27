@@ -5,11 +5,9 @@ import AnalysisChart from "../AnalysisChart";
 
 const Card = ({ stock }) => {
     const { symbol, name, price, marketCap, volume, tags = ["oink", "based", "moon"] } = stock;
-
-    const navigation = useNavigation();
-    // console.log('stock',stock)
-
+    
     // navigate to the bio screen
+    const navigation = useNavigation();
     const openBio = () => {
         navigation.navigate("Bio", { symbol, name });
     };
@@ -23,8 +21,6 @@ const Card = ({ stock }) => {
     };
 
     return (
-        // instead of an image, we will display the YTD graph
-        // card will contain graph, fundamentals, news, and online sentiment (reddit or other)
         <Pressable
             style={styles.card}
             onPress={() => {

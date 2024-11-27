@@ -18,30 +18,25 @@ const HomeScreen = () => {
         // console.log("swipe right:", stock.symbol);
     };
 
-    const symbolList = stocks.map((obj) => {
-        return obj.symbol;
+    const symbolList = stocks.map(({ symbol }) => {
+        return symbol;
     });
-
-    // let stockData = {};
 
     const listString = symbolList.join(",");
 
     const [data, setData] = useState("");
 
     useEffect(() => {
-        Axios.get(`https://financialmodelingprep.com/api/v3/quote/${listString}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`).then(
-            (res) => {
-                console.log("fetching...");
-                setData(res.data);
-            }
-        );
+        Axios.get(
+            `https://financialmodelingprep.com/api/v3/quote/${listString}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`
+        ).then((res) => {
+            console.log("fetching bulk price data...");
+            setData(res.data);
+        });
     }, []);
-
-    // console.log('data:',data[0])
 
     return (
         <View style={styles.pageContainer}>
-            {/* <StockData /> */}
             <AnimatedStack
                 data={data}
                 renderItem={({ item }) => <Card stock={item} />}
