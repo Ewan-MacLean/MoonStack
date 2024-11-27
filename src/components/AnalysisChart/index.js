@@ -9,6 +9,7 @@ import axios from "axios";
 import { isEmpty } from "lodash";
 import TimeFrameBar from "../TimeFrameBar";
 import { useRoute } from "@react-navigation/native";
+import parseDateString from "../../utils/formatter";
 
 const AnalysisChart = ({ symbol }) => {
     // const route = useRoute();
@@ -48,9 +49,11 @@ const AnalysisChart = ({ symbol }) => {
             .catch((err) => console.error(err));
     }, [symbol, timeframe]);
 
+    // console.log(dateInfo);
     const oinkData = chartData
-        ? chartData.map(({ c, datetime }, ind) => {
+        ? chartData.map(({ c, t }, ind) => {
               return { value: parseFloat(c), t: ind };
+            //   return { value: parseFloat(c), t: parseDateString(t)['day'] + parseDateString(t)['month'] };
           })
         : [];
 
@@ -58,7 +61,7 @@ const AnalysisChart = ({ symbol }) => {
     if (!isEmpty(chartData)) {
         const difference = oinkData[0].value - oinkData[oinkData.length - 1].value;
         const pctChange = 1 - oinkData[0].value / oinkData[oinkData.length - 1].value;
-        console.log(pctChange);
+        // console.log(pctChange);
         const colour = difference < 0 ? "green" : "red";
         // console.log("oinkData", oinkData);
         return (
@@ -86,6 +89,9 @@ const AnalysisChart = ({ symbol }) => {
                     axisOptions={{
                         font,
                     }}
+                    // xAxis={{
+                    //     tickCount:10
+                    // }}
                     domainPadding={{ top: 100, bottom: 100, right: 20 }}
                 >
                     {({ points, chartBounds }) => {
@@ -112,7 +118,11 @@ const AnalysisChart = ({ symbol }) => {
             </View>
         );
     } else {
-        return <Text>OINK</Text>;
+        return (
+            <View style={{ height: 350, justifyContent: "center", alignItems: "center" }}>
+                <Text>Loading...</Text>
+            </View>
+        );
     }
 };
 

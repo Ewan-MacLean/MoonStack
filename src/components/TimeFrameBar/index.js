@@ -17,6 +17,15 @@ const TimeFrameBar = ({timeframe,setTimeFrame,setIncrement}) => {
         >
             <Pressable
                 onPress={() => {
+                    setTimeFrame(365*5);
+                    setIncrement('1W')
+                }}
+                style={[styles.button, timeframe === 365*5 && { backgroundColor: "white" }]}
+            >
+                <Text>5Y</Text>
+            </Pressable>
+            <Pressable
+                onPress={() => {
                     setTimeFrame(365);
                     setIncrement('1D')
                 }}
