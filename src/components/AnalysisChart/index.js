@@ -52,8 +52,8 @@ const AnalysisChart = ({ symbol }) => {
     // console.log(dateInfo);
     const oinkData = chartData
         ? chartData.map(({ c, t }, ind) => {
-              return { value: parseFloat(c), t: ind };
-            //   return { value: parseFloat(c), t: parseDateString(t)['day'] + parseDateString(t)['month'] };
+              //   return { value: parseFloat(c), t: ind };
+              return { value: parseFloat(c), t: t };
           })
         : [];
 
@@ -88,9 +88,26 @@ const AnalysisChart = ({ symbol }) => {
                     yKeys={["value"]}
                     axisOptions={{
                         font,
+
+                        formatXLabel: (value) => {
+                            // console.log(value?.toLocaleString())
+                            if (!isEmpty(value)) {
+                                const stringValue = value.toLocaleString();
+                                const dateInfo = parseDateString(stringValue);
+                                const { monthYear } = dateInfo;
+                                const cleanDate = [
+                                    monthYear.slice(0, 3),
+                                    ...[`'`, monthYear.slice(monthYear.length - 2, monthYear.length)],
+                                ].join("")
+                                return cleanDate;
+                            }
+                            return "Err.";
+                        },
                     }}
                     // xAxis={{
-                    //     tickCount:10
+                    //     formatXLabel: {
+                    //         label: (t) => parseDateString(t)["year"],
+                    //     },
                     // }}
                     domainPadding={{ top: 100, bottom: 100, right: 20 }}
                 >
