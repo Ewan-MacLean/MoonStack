@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet, Pressable } from "react-native";
 
-const TimeFrameBar = ({timeframe,setTimeFrame,setIncrement}) => {
+const TimeFrameBar = ({timeframe,setTimeFrame,increment,setIncrement}) => {
     return (
         <View
             style={{

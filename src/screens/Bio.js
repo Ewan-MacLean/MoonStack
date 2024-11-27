@@ -5,9 +5,11 @@ import { FlatList, ScrollView } from "react-native-gesture-handler";
 import NavHeader from "../components/NavHeader";
 import AnalysisChart from "../components/AnalysisChart";
 import Axios from "axios";
+import { isEmpty } from "lodash";
 
 const Bio = ({ navigation, route }) => {
-    const [data, setData] = useState("");
+    const [data, setData] = useState({});
+    const [keyMetrics, setKeyMetrics] = useState({});
 
     const handleGoBack = () => {
         navigation.goBack();
@@ -16,16 +18,16 @@ const Bio = ({ navigation, route }) => {
     const { symbol, name } = route.params;
 
     const financialCharacteristics = [
-        { id: "earningsPerShare", title: "EPS" },
-        { id: "priceToEarningsRatio", title: "P/E Ratio" },
-        { id: "priceToBookRatio", title: "P/B Ratio" },
-        { id: "dividendYield", title: "Dividend Yield" },
-        { id: "returnOnEquity", title: "ROE" },
-        { id: "debtToEquityRatio", title: "D/E Ratio" },
-        { id: "freeCashFlow", title: "FCF" },
-        { id: "revenueGrowth", title: "RG" },
-        { id: "currentRatio", title: "CR" },
-        { id: "beta", title: "Beta" },
+        // { id: "earningsPerShare", title: "EPS" },
+        { id: "peRatioTTM", title: "P/E Ratio" },
+        { id: "ptbRatioTTM", title: "P/B Ratio" },
+        { id: "dividendYieldTTM", title: "Dividend Yield" },
+        { id: "roeTTM", title: "ROE" },
+        { id: "debtToEquityTTM", title: "D/E Ratio" },
+        { id: "freeCashFlowYieldTTM", title: "FCF Yield" },
+        // { id: "revenueGrowth", title: "RG" },
+        { id: "currentRatioTTM", title: "Current Ratio" },
+        // { id: "beta", title: "Beta" },
     ];
 
     useEffect(() => {
@@ -35,18 +37,31 @@ const Bio = ({ navigation, route }) => {
             // console.log("fetching bio...");
             setData(res.data[0]);
         });
+        Axios.get(
+            `https://financialmodelingprep.com/api/v3/key-metrics-ttm/${symbol}?apikey=qQWpLn4H9rBkh6ykOXqK2XDqCkpMvtKb`
+        ).then((res) => {
+            // console.log("fetching bio...");
+            setKeyMetrics(res.data[0]);
+        });
     }, []);
+
+    // console.log("keyMetrics", keyMetrics);
+    // const { peRatioTTM, ptbRatioTTM, dividendYieldTTM, roeTTM, debtToEquityTTM, freeCashFlowYieldTTM } = keyMetrics;
 
     const { description } = data;
 
     LogBox.ignoreLogs(["VirtualizedLists"]);
 
-    const Item = ({ title }) => (
-        <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.title}>23</Text>
-        </View>
-    );
+    const Item = ({ title, id }) => {
+        console.log("id", keyMetrics[id].toFixed(2));
+        // console.log("title", title);
+        return (
+            <View style={styles.item}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.value}>{keyMetrics[id].toFixed(2) || "Err"}%</Text>
+            </View>
+        );
+    };
 
     return (
         <SafeAreaView style={styles.pageContainer}>
@@ -55,12 +70,14 @@ const Bio = ({ navigation, route }) => {
                 <AnalysisChart symbol={symbol} />
                 <View style={[styles.container, { flexDirection: "row", gap: 20 }]}>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.header}>Fundamentals</Text>
-                        <FlatList
-                            data={financialCharacteristics}
-                            renderItem={({ item }) => <Item title={item.title} />}
-                            keyExtractor={(item) => item.id}
-                        />
+                        <Text style={styles.header}>Key Metrics (TTM)</Text>
+                        {!isEmpty(keyMetrics) && (
+                            <FlatList
+                                data={financialCharacteristics}
+                                renderItem={({ item }) => <Item title={item.title} id={item.id} />}
+                                keyExtractor={(item) => item.id}
+                            />
+                        )}
                     </View>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.header}>News</Text>
@@ -102,6 +119,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
     },
+    title:{
+        fontSize:16,
+    },
+    value:{
+        fontSize:14
+    }
 });
 
 export default Bio;
