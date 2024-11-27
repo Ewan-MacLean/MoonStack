@@ -1,16 +1,10 @@
 import { registerRootComponent } from "expo";
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, SafeAreaView, Text, LogBox } from "react-native";
-import { useFont, Circle } from "@shopify/react-native-skia";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
-import inter from "../../assets/fonts/Inter_24pt-Regular.ttf";
-import { CartesianChart, Line, useChartPressState } from "victory-native";
-// import type { SharedValue } from "react-native-reanimated"
 import NavHeader from "../components/NavHeader";
 import AnalysisChart from "../components/AnalysisChart";
-import { LineChart } from "react-native-gifted-charts";
 import Axios from "axios";
-import { isEmpty } from "lodash";
 
 const Bio = ({ navigation, route }) => {
     const [data, setData] = useState("");
@@ -19,7 +13,7 @@ const Bio = ({ navigation, route }) => {
         navigation.goBack();
     };
 
-    const { symbol, name, oinkData } = route.params;
+    const { symbol, name } = route.params;
 
     const financialCharacteristics = [
         { id: "earningsPerShare", title: "EPS" },
@@ -57,12 +51,10 @@ const Bio = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.pageContainer}>
             <NavHeader goBack={handleGoBack} title={`${name} (${symbol})`} />
-            <ScrollView style={{ flex: 1 }}>
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    {!isEmpty(oinkData) && (
-                        <AnalysisChart historicalData={oinkData} />
-                    )}
-                </View>
+            <ScrollView scrollEnabled={true} style={{ flex: 1 }}>
+                {/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}> */}
+                <AnalysisChart symbol={symbol} />
+                {/* </View> */}
                 <View style={[styles.container, { flexDirection: "row", gap: 20 }]}>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.header}>Fundamentals</Text>
@@ -75,7 +67,6 @@ const Bio = ({ navigation, route }) => {
                     <View style={{ flex: 1 }}>
                         <Text style={styles.header}>News</Text>
                         <View>
-                            {/* These will be an amalgamation of posts about the chosen stock in the last 90 days */}
                             <Text>Reddit sentiment</Text>
                             <Text>Twitter sentiment</Text>
                             <Text>Yahoo finance sentiment</Text>
@@ -90,7 +81,6 @@ const Bio = ({ navigation, route }) => {
                 </View>
                 <View style={styles.container}>
                     <Text style={styles.header}>Bio</Text>
-                    {/* use the AI api to summarize the bio */}
                     <Text>{description}</Text>
                 </View>
             </ScrollView>

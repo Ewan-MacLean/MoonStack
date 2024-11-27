@@ -3,7 +3,8 @@ import { Text, Image, ImageBackground, View, StyleSheet, Pressable } from "react
 import { useNavigation } from "@react-navigation/native";
 import AnalysisChart from "../AnalysisChart";
 import Axios from "axios";
-import { isEmpty } from "lodash";
+import { isEmpty, isNumber, isObject, isString } from "lodash";
+import TimeFrameBar from "../TimeFrameBar";
 
 const Card = ({ stock }) => {
     const { symbol, name, price, marketCap, volume, tags = ["oink", "based", "moon"] } = stock;
@@ -18,7 +19,7 @@ const Card = ({ stock }) => {
 
     // navigate to the bio screen
     const openBio = () => {
-        navigation.navigate("Bio", { symbol, name, oinkData });
+        navigation.navigate("Bio", { symbol, name });
     };
 
     const formatCash = (n) => {
@@ -29,45 +30,36 @@ const Card = ({ stock }) => {
         if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
     };
 
-    const options = {
-      method: 'GET',
-      url: `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&timeframe=1D&start=2024-11-03&limit=1000&adjustment=raw&feed=sip&sort=asc`,
-      headers: {
-        accept: 'application/json',
-        'APCA-API-KEY-ID': 'PKSMKSPD6TJUUPYIA2BT',
-        'APCA-API-SECRET-KEY': 'ry0JLg188ZobYvqwLa7CZiN9cD8bCR5We13dkgPF'
-      }
-    };
-    
-    // axios
-    //   .request(options)
-    //   .then(res => console.log(res.data))
-    //   .catch(err => console.error(err));
+    // const [timeframe, setTimeFrame] = useState(30);
+    // var today = new Date();
+    // var priorDate = new Date(new Date().setDate(today.getDate() - timeframe));
+    // priorDate = priorDate.toLocaleString().slice(0, 10);
 
-    useEffect(() => {
-        Axios.request(options)
-            .then((res) => {
-                setChartData(res.data.bars[symbol]);
-                console.log(res.data.bars[symbol])
-            })
-            .catch((err) => console.error(err));
-    }, [symbol]);
+    // const options = {
+    //     method: "GET",
+    //     url: `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&timeframe=1D&start=${priorDate}&limit=1000&adjustment=raw&feed=sip&sort=asc`,
+    //     headers: {
+    //         accept: "application/json",
+    //         "APCA-API-KEY-ID": "PKSMKSPD6TJUUPYIA2BT",
+    //         "APCA-API-SECRET-KEY": "ry0JLg188ZobYvqwLa7CZiN9cD8bCR5We13dkgPF",
+    //     },
+    // };
 
     // useEffect(() => {
-    //     Axios.get(
-    //         `https://api.twelvedata.com/time_series?start_date=2023-05-06&outputsize=10&symbol=${symbol.toLowerCase()}&interval=1day&apikey=2019577afec24b56bee51333f2ac580d`
-    //     ).then((res) => {
-    //         console.log("fetching chart...");
-    //         setChartData(res.data.values);
-    //     });
-    // }, [symbol]);
+    //     Axios.request(options)
+    //         .then((res) => {
+    //             setChartData(res.data.bars[symbol]);
+    //             console.log(res.data.bars[symbol]);
+    //         })
+    //         .catch((err) => console.error(err));
+    // }, [symbol, timeframe]);
 
-    const oinkData = chartData
-        ? chartData.map(({ c, datetime }, ind) => {
-              return { value: parseFloat(c), t: ind };
-          })
-        : [];
-    console.log("oinkData", oinkData);
+    // const oinkData = chartData
+    //     ? chartData.map(({ c, datetime }, ind) => {
+    //           return { value: parseFloat(c), t: ind };
+    //       })
+    //     : [];
+    // console.log("oinkData", oinkData);
     return (
         // instead of an image, we will display the YTD graph
         // card will contain graph, fundamentals, news, and online sentiment (reddit or other)
@@ -78,8 +70,11 @@ const Card = ({ stock }) => {
             }}
         >
             <View style={styles.main}>
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center", borderWidth: 1 }}>
-                    {!isEmpty(oinkData) && <AnalysisChart historicalData={oinkData} />}
+                {/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center", borderWidth: 1 }}> */}
+                <View>
+                    {/* {!isEmpty(oinkData) && <AnalysisChart historicalData={oinkData} />} */}
+                    <AnalysisChart symbol={symbol} />
+                    {/* <TimeFrameBar timeframe={timeframe} setTimeFrame={setTimeFrame} /> */}
                 </View>
                 <View style={styles.inner}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -145,7 +140,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: "hidden",
         justifyContent: "flex-end",
-        gap: 20,
+        // gap: 20,
     },
     inner: {
         padding: 10,
