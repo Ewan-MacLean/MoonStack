@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Text, Image, ImageBackground, View, StyleSheet, Pressable } from "react-native";
+import React from "react";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AnalysisChart from "../AnalysisChart";
-import Axios from "axios";
-import { isEmpty, isNumber, isObject, isString } from "lodash";
-import TimeFrameBar from "../TimeFrameBar";
 
 const Card = ({ stock }) => {
     const { symbol, name, price, marketCap, volume, tags = ["oink", "based", "moon"] } = stock;
@@ -56,11 +53,6 @@ const Card = ({ stock }) => {
                                     </View>
                                 </View>
                             </View>
-                            {/* <View style={{ flexDirection: "row", gap: 10 }}>
-                                <Text style={styles.infoText}>3M:+10%</Text>
-                                <Text style={styles.infoText}>6M:+10%</Text>
-                                <Text style={styles.infoText}>1Y:+10%</Text>
-                            </View> */}
                         </View>
                     </View>
                     <View style={styles.tags}>

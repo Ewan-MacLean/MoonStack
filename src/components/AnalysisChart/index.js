@@ -8,12 +8,9 @@ import inter from "../../../assets/fonts/Inter_24pt-Regular.ttf";
 import axios from "axios";
 import { isEmpty } from "lodash";
 import TimeFrameBar from "../TimeFrameBar";
-import { useRoute } from "@react-navigation/native";
 import parseDateString from "../../utils/formatter";
 
 const AnalysisChart = ({ symbol }) => {
-    // const route = useRoute();
-    // console.log(route.name);
     const font = useFont(inter, 12);
     const { state, isActive } = useChartPressState({ x: 0, y: { highTmp: 0 } });
 
@@ -28,7 +25,6 @@ const AnalysisChart = ({ symbol }) => {
     var priorDate = new Date(new Date().setDate(today.getDate() - timeframe));
     priorDate = priorDate.toLocaleString().slice(0, 10);
 
-    // console.log('hist',historicalData)
     const options = {
         method: "GET",
         url: `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&timeframe=${increment}&start=${priorDate}&limit=1000&adjustment=raw&feed=sip&sort=asc`,
@@ -44,28 +40,21 @@ const AnalysisChart = ({ symbol }) => {
             .request(options)
             .then((res) => {
                 setChartData(res.data.bars[symbol]);
-                // console.log(res.data.bars[symbol]);
             })
             .catch((err) => console.error(err));
     }, [symbol, timeframe]);
 
-    // console.log(dateInfo);
     const oinkData = chartData
         ? chartData.map(({ c, t }, ind) => {
-              //   return { value: parseFloat(c), t: ind };
               return { value: parseFloat(c), t: t };
           })
         : [];
 
-    // console.log('chartData',chartData)
     if (!isEmpty(chartData)) {
         const difference = oinkData[0].value - oinkData[oinkData.length - 1].value;
         const pctChange = 1 - oinkData[0].value / oinkData[oinkData.length - 1].value;
-        // console.log(pctChange);
         const colour = difference < 0 ? "green" : "red";
-        // console.log("oinkData", oinkData);
         return (
-            // <View>
             <View style={{ height: 350, marginHorizontal: 7 }}>
                 <View
                     style={{
@@ -88,9 +77,7 @@ const AnalysisChart = ({ symbol }) => {
                     yKeys={["value"]}
                     axisOptions={{
                         font,
-
                         formatXLabel: (value) => {
-                            // console.log(value?.toLocaleString())
                             if (!isEmpty(value)) {
                                 const stringValue = value.toLocaleString();
                                 const dateInfo = parseDateString(stringValue);
@@ -98,21 +85,15 @@ const AnalysisChart = ({ symbol }) => {
                                 const cleanDate = [
                                     monthYear.slice(0, 3),
                                     ...[`'`, monthYear.slice(monthYear.length - 2, monthYear.length)],
-                                ].join("")
+                                ].join("");
                                 return cleanDate;
                             }
                             return "Err.";
                         },
                     }}
-                    // xAxis={{
-                    //     formatXLabel: {
-                    //         label: (t) => parseDateString(t)["year"],
-                    //     },
-                    // }}
                     domainPadding={{ top: 100, bottom: 100, right: 20 }}
                 >
                     {({ points, chartBounds }) => {
-                        // console.log("value");
                         return (
                             <>
                                 <Line points={points.value} color={colour} strokeWidth={3} curveType="cardinal50" />
@@ -120,7 +101,6 @@ const AnalysisChart = ({ symbol }) => {
                                 <Area
                                     points={points.value}
                                     y0={chartBounds.bottom}
-                                    // blendMode="hardLight"
                                     curveType="cardinal50"
                                     opacity={0.3}
                                     color={colour}
@@ -130,7 +110,6 @@ const AnalysisChart = ({ symbol }) => {
                         );
                     }}
                 </CartesianChart>
-
                 <TimeFrameBar timeframe={timeframe} setTimeFrame={setTimeFrame} setIncrement={setIncrement} />
             </View>
         );

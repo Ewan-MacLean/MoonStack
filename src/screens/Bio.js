@@ -52,9 +52,7 @@ const Bio = ({ navigation, route }) => {
         <SafeAreaView style={styles.pageContainer}>
             <NavHeader goBack={handleGoBack} title={`${name} (${symbol})`} />
             <ScrollView scrollEnabled={true} style={{ flex: 1 }}>
-                {/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}> */}
                 <AnalysisChart symbol={symbol} />
-                {/* </View> */}
                 <View style={[styles.container, { flexDirection: "row", gap: 20 }]}>
                     <View style={{ flex: 1 }}>
                         <Text style={styles.header}>Fundamentals</Text>
