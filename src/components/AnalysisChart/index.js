@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { View, Text } from "react-native";
-import { CartesianChart, Line, useChartPressState } from "victory-native";
+import { CartesianChart, Line, Area, useChartPressState } from "victory-native";
 import { Circle, useFont } from "@shopify/react-native-skia";
 import { SharedValue } from "react-native-reanimated";
 import inter from "../../../assets/fonts/Inter_24pt-Regular.ttf";
@@ -22,6 +22,7 @@ const AnalysisChart = ({ symbol }) => {
     }
     const [chartData, setChartData] = useState([]);
     const [timeframe, setTimeFrame] = useState(30);
+    const [increment, setIncrement] = useState("30Min");
     var today = new Date();
     var priorDate = new Date(new Date().setDate(today.getDate() - timeframe));
     priorDate = priorDate.toLocaleString().slice(0, 10);
@@ -29,7 +30,7 @@ const AnalysisChart = ({ symbol }) => {
     // console.log('hist',historicalData)
     const options = {
         method: "GET",
-        url: `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&timeframe=1D&start=${priorDate}&limit=1000&adjustment=raw&feed=sip&sort=asc`,
+        url: `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbol}&timeframe=${increment}&start=${priorDate}&limit=1000&adjustment=raw&feed=sip&sort=asc`,
         headers: {
             accept: "application/json",
             "APCA-API-KEY-ID": "PKSMKSPD6TJUUPYIA2BT",
@@ -51,13 +52,33 @@ const AnalysisChart = ({ symbol }) => {
         ? chartData.map(({ c, datetime }, ind) => {
               return { value: parseFloat(c), t: ind };
           })
-        : [{ value: 5, t: 1 }];
+        : [];
+
     // console.log('chartData',chartData)
     if (!isEmpty(chartData)) {
+        const difference = oinkData[0].value - oinkData[oinkData.length - 1].value;
+        const pctChange = 1 - oinkData[0].value / oinkData[oinkData.length - 1].value;
+        console.log(pctChange);
+        const colour = difference < 0 ? "green" : "red";
         // console.log("oinkData", oinkData);
         return (
             // <View>
-            <View style={{ height:300 }}>
+            <View style={{ height: 350, marginHorizontal: 7 }}>
+                <View
+                    style={{
+                        width: "100%",
+                        height: 30,
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        paddingHorizontal: 30,
+                    }}
+                >
+                    {pctChange > 0 ? (
+                        <Text style={{ color: "green", fontSize: 20 }}>+{(pctChange * 100).toFixed(2)}%</Text>
+                    ) : (
+                        <Text style={{ color: "red", fontSize: 20 }}>{(pctChange * 100).toFixed(2)}%</Text>
+                    )}
+                </View>
                 <CartesianChart
                     data={oinkData}
                     xKey="t"
@@ -67,17 +88,27 @@ const AnalysisChart = ({ symbol }) => {
                     }}
                     domainPadding={{ top: 100, bottom: 100, right: 20 }}
                 >
-                    {({ points }) => {
+                    {({ points, chartBounds }) => {
                         // console.log("value");
                         return (
                             <>
-                                <Line points={points.value} color="red" strokeWidth={3} curveType="cardinal50" />
+                                <Line points={points.value} color={colour} strokeWidth={3} curveType="cardinal50" />
                                 {isActive && <ToolTip x={state.x.position} y={state.y.value.position} />}
+                                <Area
+                                    points={points.value}
+                                    y0={chartBounds.bottom}
+                                    // blendMode="hardLight"
+                                    curveType="cardinal50"
+                                    opacity={0.3}
+                                    color={colour}
+                                    // animate={{ type: "timing", duration: 300 }}
+                                />
                             </>
                         );
                     }}
                 </CartesianChart>
-                <TimeFrameBar timeframe={timeframe} setTimeFrame={setTimeFrame} />
+
+                <TimeFrameBar timeframe={timeframe} setTimeFrame={setTimeFrame} setIncrement={setIncrement} />
             </View>
         );
     } else {

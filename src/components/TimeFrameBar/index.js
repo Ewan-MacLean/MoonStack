@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Text, Image, ImageBackground, View, StyleSheet, Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import AnalysisChart from "../AnalysisChart";
-import Axios from "axios";
-import { isEmpty, isNumber, isObject, isString } from "lodash";
+import React from "react";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 
-const TimeFrameBar = ({timeframe,setTimeFrame}) => {
+const TimeFrameBar = ({timeframe,setTimeFrame,setIncrement}) => {
     return (
         <View
             style={{
                 flexDirection: "row",
                 height: 50,
-                width: 30,
-                width: "100%",
+                width:"105%",
+                marginHorizontal:-10,
                 backgroundColor: "grey",
                 justifyContent: "center",
                 alignItems: "center",
@@ -22,6 +18,7 @@ const TimeFrameBar = ({timeframe,setTimeFrame}) => {
             <Pressable
                 onPress={() => {
                     setTimeFrame(365);
+                    setIncrement('1D')
                 }}
                 style={[styles.button, timeframe === 365 && { backgroundColor: "white" }]}
             >
@@ -30,6 +27,7 @@ const TimeFrameBar = ({timeframe,setTimeFrame}) => {
             <Pressable
                 onPress={() => {
                     setTimeFrame(120);
+                    setIncrement('2H')
                 }}
                 style={[styles.button, timeframe === 120 && { backgroundColor: "white" }]}
             >
@@ -38,6 +36,7 @@ const TimeFrameBar = ({timeframe,setTimeFrame}) => {
             <Pressable
                 onPress={() => {
                     setTimeFrame(30);
+                    setIncrement('30Min')
                 }}
                 style={[styles.button, timeframe === 30 && { backgroundColor: "white" }]}
             >
