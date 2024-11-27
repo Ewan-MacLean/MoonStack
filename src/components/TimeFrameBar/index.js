@@ -35,10 +35,10 @@ const TimeFrameBar = ({timeframe,setTimeFrame,increment,setIncrement}) => {
             </Pressable>
             <Pressable
                 onPress={() => {
-                    setTimeFrame(120);
+                    setTimeFrame(183);
                     setIncrement('2H')
                 }}
-                style={[styles.button, timeframe === 120 && { backgroundColor: "white" }]}
+                style={[styles.button, timeframe === 183 && { backgroundColor: "white" }]}
             >
                 <Text>6M</Text>
             </Pressable>
