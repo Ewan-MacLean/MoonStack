@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "prelude",
-    "slug": "prelude",
+    "name": "MoonStack",
+    "slug": "MoonStack",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
