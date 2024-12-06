@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation, NavigationContainer } from "@react-navigation/native";
 import HomeStackNavigator from "./HomeStackNavigator";
 import MatchesScreen from "../screens/MatchesScreen";
+import WatchlistScreen from "../screens/Watchlist";
 
 const Tab = createBottomTabNavigator();
 
@@ -64,8 +65,8 @@ const TabNavigator = ({ route: { params = {} } = {} }) => {
                     }}
                 />
                 <Tab.Screen
-                    name="Saved"
-                    component={MatchesScreen}
+                    name="Watchlist"
+                    component={WatchlistScreen}
                     options={{
                         headerShown: false,
                         tabBarLabel: ({ tintColor, focused }) => (
@@ -74,10 +75,10 @@ const TabNavigator = ({ route: { params = {} } = {} }) => {
                                     // fontFamily: fonts.standard,
                                     fontSize: 10,
                                     lineHeight: 18,
-                                    color: 'white',
+                                    color: 'white'
                                 }}
                             >
-                                Saved
+                                Watchlist
                             </Text>
                         ),
                         // tabBarIcon: ({ focused }) =>
