@@ -7,6 +7,7 @@ import AnimatedStack from "../components/AnimatedStack";
 import Axios from "axios";
 import { isEmpty } from "lodash";
 import StockData from "../components/StockData";
+import writeDailySpecial from "../_firebase";
 
 // RENAME THE APP TO 'MOONSTACK'
 
@@ -15,6 +16,7 @@ const HomeScreen = () => {
         // console.log("swipe left:", stock.symbol);
     };
     const onSwipeRight = (stock) => {
+        writeDailySpecial(stock.symbol)
         // console.log("swipe right:", stock.symbol);
     };
 
