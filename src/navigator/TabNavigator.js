@@ -64,7 +64,7 @@ const TabNavigator = ({ route: { params = {} } = {} }) => {
                         //     ),
                     }}
                 />
-                <Tab.Screen
+                {/* <Tab.Screen
                     name="Watchlist"
                     component={WatchlistScreen}
                     options={{
@@ -88,7 +88,7 @@ const TabNavigator = ({ route: { params = {} } = {} }) => {
                         //         <NotesInactive style={{ width: 22, height: 22 }} />
                         //     ),
                     }}
-                />
+                /> */}
                 <Tab.Screen
                     name="Profile"
                     component={MatchesScreen}

@@ -53,7 +53,7 @@ const Bio = ({ navigation, route }) => {
     LogBox.ignoreLogs(["VirtualizedLists"]);
 
     const Item = ({ title, id }) => {
-        console.log("id", keyMetrics[id].toFixed(2));
+        // console.log("id", keyMetrics[id].toFixed(2));
         // console.log("title", title);
         return (
             <View style={styles.item}>
